@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="AccenturePOC">
+    <global-unknown index="1" description="false" entity-id="global-unknown#1">
+        <content>&lt;mulexml:namespace-manager xmlns:mulexml=&quot;http://www.mulesoft.org/schema/mule/xml&quot;&gt;
+		&lt;mulexml:namespace prefix=&quot;account&quot; uri=&quot;http://rp.baml.com/data/GePaymentsRequestV001&quot;/&gt;
+	&lt;/mulexml:namespace-manager&gt;</content>
+    </global-unknown>
+    <global-element type="org.mule.tooling.ui.modules.core.global.fileConnector" name="File" entity-id="File#1">
+        <properties>
+            <property value="true" name="streaming"/>
+            <property name="reverseOrder"/>
+            <property name="moveToPattern"/>
+            <property name="workFileNamePattern"/>
+            <property name="workDirectory"/>
+            <property name="outputAppend"/>
+            <property name="pollingFrequency"/>
+            <property name="readFromDirectory"/>
+            <property value="true" name="validateConnections"/>
+            <property name="comparator"/>
+            <property name="writeToDirectory"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="serialiseObjects"/>
+            <property name="moveToDirectory"/>
+            <property name="fileAge"/>
+            <property name="recursive"/>
+            <property value="FileConnector" name="name"/>
+            <property value="false" name="autoDelete"/>
+            <property name="dynamicNotification"/>
+            <property name="outputPattern"/>
+            <property value="3" name="auxiliary;index"/>
+        </properties>
+    </global-element>
+    <description></description>
+</mule-configuration>

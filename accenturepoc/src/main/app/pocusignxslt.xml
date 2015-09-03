@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:ftp="http://www.mulesoft.org/schema/mule/ee/ftp" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/ftp http://www.mulesoft.org/schema/mule/ee/ftp/current/mule-ftp-ee.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <flow name="pocusignxslt" doc:name="pocusignxslt">
+       <file:inbound-endpoint
+			path="E:\Eclipse Workspace\accenturepoc\src\test\resources\"
+			responseTimeout="10000" doc:name="File" connector-ref="FileConnector2"
+			pollingFrequency="10000" />
+        <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="E:\Eclipse Workspace\accenturepoc\src\main\resources\soapHeaderRemover.xslt" doc:name="XSLT"/>
+        <mulexml:xml-to-object-transformer returnClass="accenturepoc.Accounts" driverClass="com.thoughtworks.xstream.io.xml.DomDriver" doc:name="XML to Object">
+            <mulexml:alias name="account" class="accenturepoc.Account"/>
+            <mulexml:alias name="BankResponse" class="accenturepoc.Accounts"/>
+        </mulexml:xml-to-object-transformer>
+          <foreach collection="#[payload.accounts]" doc:name="For Each">
+		<choice doc:name="Choice"> 
+			<when expression="#[payload.accountNumber > 3000]">
+                <set-payload value="#[java.lang.String.valueOf(payload.accountNumber)]" doc:name="Set Payload"/>
+				<component class="accenturepoc.ProcessAccountNumber"
+					doc:name="Java" />
+			</when>
+			<otherwise>
+                <set-payload value="#[payload.accountLevel]" doc:name="Set Payload"/>
+				<component class="accenturepoc.ProcessAccountLevel"
+					doc:name="Java"/>
+			</otherwise>
+		</choice>
+		</foreach>
+    </flow>
+</mule>

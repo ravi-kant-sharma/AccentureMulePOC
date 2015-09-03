@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+
+	<mulexml:namespace-manager>
+		<mulexml:namespace prefix="account"
+			uri="http://rp.baml.com/data/GePaymentsRequestV001" />
+	</mulexml:namespace-manager>
+	<file:connector name="FileConnector" autoDelete="false"
+		streaming="true" validateConnections="true" doc:name="File" />
+
+	<!-- flow name="AccenturePOCFlow1" doc:name="AccenturePOCFlow1">
+		<file:inbound-endpoint
+			path="E:\Eclipse Workspace\accenturepoc\src\test\resources\"
+			responseTimeout="10000" doc:name="File" connector-ref="FileConnector"
+			pollingFrequency="10000" 
+			/>
+		<mulexml:dom-to-xml-transformer/>
+			<set-variable doc:name="operation"
+				value="#[xpath('//account:AccountNumber/text()').text]"
+				variableName="accountNumber" />
+		<choice doc:name="Choice">
+			<when expression="#[java.lang.Integer.parseInt(flowVars.accountNumber) > 3000]">
+                <set-payload value="#[flowVars.accountNumber]" doc:name="Set Payload"/>
+				<component class="accenturepoc.ProcessAccountNumber"
+					doc:name="Java" />
+			</when>
+			<otherwise>
+                <set-payload value="#[xpath('//account:AccountIdLevel/text()').text]" doc:name="Set Payload"/>
+				<component class="accenturepoc.ProcessAccountLevel"
+					doc:name="Java" />
+			</otherwise>
+		</choice>
+	</flow-->
+</mule>

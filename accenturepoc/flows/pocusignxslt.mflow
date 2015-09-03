@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="pocusignxslt">
+    <flow SubFlow="false" name="pocusignxslt" entity-id="140d405c-8810-44f1-99db-217d4c72fbeb">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="1" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/file/endpoint" name="File" entity-id="File#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property value="10000" name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property value="E:\Eclipse Workspace\accenturepoc\src\test\resources\" name="path"/>
+                    <property name="encoding"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property value="2" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property value="FileConnector2" name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/xml/xslt-transformer" name="XSLT" entity-id="XSLT#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property value="E:\Eclipse Workspace\accenturepoc\src\main\resources\soapHeaderRemover.xslt" name="xsl-file"/>
+                    <property name="ignoreBadInput"/>
+                    <property value="5" name="maxActiveTransformers"/>
+                    <property name="encoding"/>
+                    <property name="transformerFactoryClass"/>
+                    <property name="outputEncoding"/>
+                    <property name="mimeType"/>
+                    <property value="3" name="auxiliary;index"/>
+                    <property value="2" name="maxIdleTransformers"/>
+                    <property name="uriResolver-ref"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/xml/xml-to-object-transformer" name="XML to Object" entity-id="XML to Object#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="accenturepoc.Accounts" name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property value="com.thoughtworks.xstream.io.xml.DomDriver" name="driverClass"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property value="4" name="auxiliary;index"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/xml/alias;0">
+                        <property value="account" name="name"/>
+                        <property value="accenturepoc.Account" name="class"/>
+                        <property value="5" name="auxiliary;index"/>
+                        <property value="5" name="auxiliary;wrapIn"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/xml/alias;1">
+                        <property value="BankResponse" name="name"/>
+                        <property value="accenturepoc.Accounts" name="class"/>
+                        <property value="6" name="auxiliary;index"/>
+                        <property value="6" name="auxiliary;wrapIn"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <scope type="http://www.mulesoft.org/schema/mule/core/foreach" name="For Each" entity-id="For Each#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="counterVariableName"/>
+                    <property name="rootMessageVariableName"/>
+                    <property name="batchSize"/>
+                    <property value="#[payload.accounts]" name="collection"/>
+                    <property value="7" name="auxiliary;index"/>
+                </properties>
+                <compartment entity-id="compartment#1">
+                    <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#2">
+                        <splitter index="8" type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="Choice#1">
+                            <graphicalData height="0" width="0" y="0" x="0"/>
+                            <properties>
+<property-collection name="c7c648a4-b01c-4dd5-840a-3e2cdc5eefe8">
+    <property value="true" name="choice.otherwise"/>
+    <property-collection name="choice.attributes"/>
+</property-collection>
+<property-collection name="7be10554-5739-4a04-870a-953ac23bb050">
+    <property value="#[payload.accountNumber &gt; 3000]" name="choice.expression"/>
+    <property-collection name="choice.attributes">
+        <property value="#[payload.accountNumber &gt; 3000]" name="expression"/>
+    </property-collection>
+</property-collection>
+                            </properties>
+                            <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="Choice#2"/>
+                            <compartment entity-id="compartment#2">
+<lane isChoiceOtherwiseLane="false" index="10" hadOnlyOneElement="false" entity-id="7be10554-5739-4a04-870a-953ac23bb050">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/set-payload" name="Set Payload" entity-id="Set Payload#1">
+        <graphicalData height="0" width="0" y="0" x="0"/>
+        <properties>
+            <property value="#[java.lang.String.valueOf(payload.accountNumber)]" name="value"/>
+            <property value="10" name="auxiliary;index"/>
+        </properties>
+    </pattern>
+    <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="Java#1">
+        <graphicalData height="0" width="0" y="0" x="0"/>
+        <properties>
+            <property value="accenturepoc.ProcessAccountNumber" name="class"/>
+            <property value="11" name="auxiliary;index"/>
+        </properties>
+    </pattern>
+</lane>
+<lane isChoiceOtherwiseLane="true" index="13" hadOnlyOneElement="false" entity-id="c7c648a4-b01c-4dd5-840a-3e2cdc5eefe8">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/set-payload" name="Set Payload" entity-id="Set Payload#2">
+        <graphicalData height="0" width="0" y="0" x="0"/>
+        <properties>
+            <property value="#[payload.accountLevel]" name="value"/>
+            <property value="13" name="auxiliary;index"/>
+        </properties>
+    </pattern>
+    <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="Java#2">
+        <graphicalData height="0" width="0" y="0" x="0"/>
+        <properties>
+            <property value="accenturepoc.ProcessAccountLevel" name="class"/>
+            <property value="14" name="auxiliary;index"/>
+        </properties>
+    </pattern>
+</lane>
+                            </compartment>
+                        </splitter>
+                    </lane>
+                </compartment>
+            </scope>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
